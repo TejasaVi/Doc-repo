@@ -1,0 +1,33 @@
+Installation Instructions
+Steps to run LXD.
+•	Disable SELinux:
+•	  # setenforce permissive
+•	
+•	Enable the COPR repository for LXC 2.1:
+•	  # dnf copr enable ganto/lxc
+•	
+•	Enable this COPR repository:
+•	   # dnf copr enable ganto/lxd
+•	
+•	Install LXD:
+•	  # dnf install lxd lxd-client lxd-tools
+•	
+•	Add management user account to lxd group:
+•	  # usermod -a -G lxd <user>
+•	
+•	Set sub{u,g}id range for containerized root user. For more information see man (5) subuid.
+•	  # echo "root:1000000:65536" >> /etc/subuid
+•	  # echo "root:1000000:65536" >> /etc/subgid
+•	
+•	Enable and start lxd:
+•	   # systemctl enable lxd && systemctl start lxd
+•	
+•	Run LXD initialization
+•	  # lxd init
+•	
+•	List available default images:
+•	   $ lxc image list images:
+•	
+•	Start your first container:
+•	   $ lxc launch images:fedora/25
+

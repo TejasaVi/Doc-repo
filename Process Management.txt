@@ -1,0 +1,51 @@
+Process Management (user-space):
+1. Each process is identified by unique id (pid).
+2. MAX_PID is defined in /proc/sys/kernel/pid_max
+3. pid and ppid for threads remain same.
+4. threads have different thread id (pthread_self())
+5. fork() creates a new process - 
+		a. fork() returns two values.
+		b. returns non-zero value(pid) and zero in child process.
+		c. On creating new process the OS employs Copy-on-write on parent process pages.
+6. process can be terminated using exit() or signals - SIGTERM/SIGKILL
+7. When child process dies before parent process and only refernces to child process are allocated in the memory waiting to be reclaimed then the child process is said o be in zombie state.
+8. When a parent process dies before the child and a process is left with no parent process, then the child process is said to be orphan process.
+9. Spawning new process without waiting for the status is system()
+10. Deamon is a process running in background.
+11. deamon() is used to create deamon process.
+12. Process Memory layout
+       					    ________________________
+ 		    			    |Kernel 				          |
+				    	    |environ, argv			      |
+					        |Stack 				          	|
+	Top of stack ->	|unallocated		  	      |
+	program break->	|						              |
+					        |Heap					            |
+					        |Unitialized data(bss)  	|
+					        |initialized data     		|
+					        |Text           					|
+					         =========================
+13. whenever a process tries to access pages whose entries are not present in page table causes SIGSEGV. or simply said that the process is trying to acces memory that doesnt belong to the process.
+
+Process Management (Kernel-space):
+1. Processes are represented by task_sturct in kernel and maintained in a circular doubly linked list.
+2. Each time a process is created a task_sturct is allocated from the slab allocator.
+3. Each task_sturct is wrapped around with struct thread_info and thread_info is scheduled onto a CPU (Linux implementation). current_thread_info() returns the currently scheduled task. and current() marco derefernce to the current task_sturct.
+4. Process state(es) can be TASK_RUNNING, TASK_INTERRUPTIBLE, TASK_UNINTERRUPTIBLE (waiting)
+5. When a process executes a system call, it triggers a exception and it enter into the kernel space and the kernel is said to be executing on behalf of the user process. this is said to be executing  in "process context".
+6. When executing a interrupt handler or bottom half, the kernel is in interrupt context it is said to be executing in "kernel context".
+7. fork()
+	-> do_fork()
+		->  copy_process()
+				.dup_task_struct()
+				.set TASK_UNINTERRUPTIBLE so it doesnt get scheduled.
+				.copy_flags(), clear PF_SUPERPRIV, set PF_FORKNOEXEC.
+				.alloc_pid()
+				.clone() resources (depends on the flags that are passed to clone)
+				.returns pid for child to caller.
+8. Process Address space is represented by mm_struct for a process.
+9. Process Address space is collection of multiple contiguous memory areas represented by vm_area_struct.
+
+
+
+4. 

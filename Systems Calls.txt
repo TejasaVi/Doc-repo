@@ -1,0 +1,23 @@
+Systems Calls are the interfaces using which a user space program can consume the functionality exposed by the Operating System or access the Hardware.
+
+The system calls are usally consumed by the user application using the standard libraries or APIs example printf(), read(), write().
+
+The Linux kernel sets aside a specific software interrupt number (0x80 i.e - 128) that can be used by user space programs to enter the kernel and execute a system call.
+
+Each system call is identified using unique Syscall number.
+Kernel keeps a list of registered systemcalls with the help of a syscall table which keeps a mapping of  Syscall number -> syscall handler.
+
+When a system call is made, it generate a software interrupt which then forces the process to switch in kernel mode (process context) and execute a system call handler.
+The syscall handler identifies the syscall to execute via register value in register "eax".
+The syscall handler validates and jumps to the syscall function using the syscall table and executes it.
+
+The system calls returns to normal execution after executing `iret` instruction. the iret instruction pops the return address and saved register
+values from the stack and retores them.
+
+
+List of some syscalls:
+Process Control 			->		fork(), exit(), wait(), system()
+File Management				->		open(),read(),write(),close()
+Memory Management			->		shmget(),mmap(),unmmap()
+communication				->		socket(),mkfifo(), pipe()
+Protection				->		chmod(), chown(),umask()

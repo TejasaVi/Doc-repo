@@ -14,17 +14,17 @@ Process Management (user-space):
 10. Deamon is a process running in background.
 11. deamon() is used to create deamon process.
 12. Process Memory layout
-       					    ________________________
- 		    			    |Kernel 				          |
-				    	    |environ, argv			      |
-					        |Stack 				          	|
-	Top of stack ->	|unallocated		  	      |
-	program break->	|						              |
-					        |Heap					            |
-					        |Unitialized data(bss)  	|
-					        |initialized data     		|
-					        |Text           					|
-					         =========================
+       						    ________________________
+ 			    			    |Kernel 		    |
+					    	    |environ, argv	    |
+					            |Stack 	       	    |
+				 Top of stack ->    |unallocated	    |
+				 program break->    |   	            |
+					            |Heap	            |
+					            |Unitialized data(bss)  |
+					            |initialized data       |
+					            |Text                   |
+					            =========================
 13. whenever a process tries to access pages whose entries are not present in page table causes SIGSEGV. or simply said that the process is trying to acces memory that doesnt belong to the process.
 
 Process Management (Kernel-space):
